@@ -2,12 +2,8 @@
 """
 
 import os
-import torch
-import numpy as np
-import torchvision
+
 import torchvision.transforms as transforms
-import torchvision.utils as vutils
-import time
 
 
 def adjust_dyn_range(x, drange_in, drange_out):
@@ -44,6 +40,9 @@ def save_image_single(x, path, imsize=512):
     ndarr = grid.mul(255).clamp(0, 255).byte().permute(1, 2, 0).numpy()
     im = Image.fromarray(ndarr)
     im = im.resize((imsize,imsize), Image.NEAREST)
+    base_path = os.path.dirname(path)
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
     im.save(path)
 
 
@@ -53,6 +52,9 @@ def save_image_grid(x, path, imsize=512, ngrid=4):
     ndarr = grid.mul(255).clamp(0, 255).byte().permute(1, 2, 0).numpy()
     im = Image.fromarray(ndarr)
     im = im.resize((imsize,imsize), Image.NEAREST)
+    base_path = os.path.dirname(path)
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
     im.save(path)
 
 

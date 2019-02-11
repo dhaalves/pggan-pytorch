@@ -1,24 +1,22 @@
+import os
+
 import torch
-import torchvision.utils as vutils
-import numpy as np
-import torchvision.models as models
-import utils as utils
-from torchvision import datasets
 from tensorboardX import SummaryWriter
-import os, sys
+
+from config import config
 import utils as utils
 
 
 class tf_recorder:
     def __init__(self):
-        utils.mkdir('repo/tensorboard')
-        
+        # utils.mkdir('repo/tensorboard')
+
         for i in range(1000):
-            self.targ = 'repo/tensorboard/try_{}'.format(i)
+            self.targ = os.path.join(config.output_dir, 'tensorboard/try_{}'.format(i))
             if not os.path.exists(self.targ):
                 self.writer = SummaryWriter(self.targ)
                 break
-                
+
     def add_scalar(self, index, val, niter):
         self.writer.add_scalar(index, val, niter)
 
@@ -38,12 +36,6 @@ class tf_recorder:
 
     def export_json(self, out_file):
         self.writer.export_scalars_to_json(out_file)
-
-
-
-
-
-
 
 
 '''
@@ -67,8 +59,6 @@ writer.add_embedding(features, metadata=label, label_img=images.unsqueeze(1))
 writer.export_scalars_to_json("./all_scalars.json")
 writer.close()
 '''
-
-
 
 '''
 resnet18 = models.resnet18(False)
@@ -106,4 +96,3 @@ writer.export_scalars_to_json("./all_scalars.json")
 
 writer.close()
 '''
-

@@ -1,10 +1,4 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import numpy as np
-from torch.autograd import Variable
 from custom_layers import *
-import copy
 
 
 # defined for code simplicity.
@@ -54,7 +48,7 @@ def soft_copy_param(target_link, source_link, tau):
 
 def get_module_names(model):
     names = []
-    for key, val in model.state_dict().iteritems():
+    for key in model.state_dict():
         name = key.split('.')[0]
         if not name in names:
             names.append(name)
