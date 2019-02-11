@@ -10,7 +10,7 @@ import utils as utils
 from config import config
 
 use_cuda = True
-checkpoint_path = os.path.joing(config.output_dir, 'model/gen_R8_T55.pth.tar')
+checkpoint_path = os.path.join(config.output_dir, 'model/gen_R8_T55.pth.tar')
 n_intp = 20
 
 # load trained model.
@@ -20,6 +20,7 @@ test_model = net.Generator(config)
 if use_cuda:
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
     test_model = torch.nn.DataParallel(test_model).cuda(device=0)
+    print(test_model.module.named_children())
 else:
     torch.set_default_tensor_type('torch.FloatTensor')
 
@@ -34,7 +35,7 @@ test_model.module.load_state_dict(checkpoint['state_dict'])
 
 # create folder.
 for i in range(1000):
-    name = os.path.joing(config.output_dir, 'interpolation/try_{}'.format(i))
+    name = os.path.join(config.output_dir, 'interpolation/try_{}'.format(i))
     if not os.path.exists(name):
         os.makedirs(name)
         break

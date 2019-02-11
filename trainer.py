@@ -61,10 +61,10 @@ class trainer:
             self.mse = self.mse.cuda()
             torch.cuda.manual_seed(config.random_seed)
             if config.n_gpu == 1:
-                # self.G = torch.nn.DataParallel(self.G).cuda(device=0)
-                # self.D = torch.nn.DataParallel(self.D).cuda(device=0)
-                self.G = self.G.cuda()
-                self.D = self.D.cuda()
+                self.G = torch.nn.DataParallel(self.G).cuda(device=0)
+                self.D = torch.nn.DataParallel(self.D).cuda(device=0)
+                # self.G = self.G.cuda()
+                # self.D = self.D.cuda()
             else:
                 gpus = []
                 for i in range(config.n_gpu):
@@ -151,12 +151,12 @@ class trainer:
             # grow network.
             if floor(self.resl) != prev_resl and floor(self.resl) < self.max_resl + 1:
                 self.lr = self.lr * float(self.config.lr_decay)
-                self.G.grow_network(floor(self.resl))
+                self.G.module.grow_network(floor(self.resl))
                 # self.Gs.grow_network(floor(self.resl))
-                self.D.grow_network(floor(self.resl))
+                self.D.module.grow_network(floor(self.resl))
                 self.renew_everything()
-                self.fadein['gen'] = dict(self.G.model.named_children())['fadein_block']
-                self.fadein['dis'] = dict(self.D.model.named_children())['fadein_block']
+                self.fadein['gen'] = dict(self.G.module.named_children())['fadein_block']
+                self.fadein['dis'] = dict(self.D.module.named_children())['fadein_block']
                 self.flag_flush_gen = True
                 self.flag_flush_dis = True
 
@@ -329,14 +329,14 @@ class trainer:
         if target == 'gen':
             state = {
                 'resl': self.resl,
-                'state_dict': self.G.state_dict(),
+                'state_dict': self.G.module.state_dict(),
                 'optimizer': self.opt_g.state_dict(),
             }
             return state
         elif target == 'dis':
             state = {
                 'resl': self.resl,
-                'state_dict': self.D.state_dict(),
+                'state_dict': self.D.module.state_dict(),
                 'optimizer': self.opt_d.state_dict(),
             }
             return state
