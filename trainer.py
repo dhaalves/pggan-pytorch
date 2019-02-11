@@ -60,17 +60,17 @@ class trainer:
         if self.use_cuda:
             self.mse = self.mse.cuda()
             torch.cuda.manual_seed(config.random_seed)
-            if config.n_gpu == 1:
-                self.G = torch.nn.DataParallel(self.G).cuda(device=0)
-                self.D = torch.nn.DataParallel(self.D).cuda(device=0)
-                # self.G = self.G.cuda()
-                # self.D = self.D.cuda()
-            else:
-                gpus = []
-                for i in range(config.n_gpu):
-                    gpus.append(i)
-                self.G = torch.nn.DataParallel(self.G, device_ids=gpus).cuda()
-                self.D = torch.nn.DataParallel(self.D, device_ids=gpus).cuda()
+            # if config.n_gpu == 1:
+            #     self.G = torch.nn.DataParallel(self.G).cuda(device=0)
+            #     self.D = torch.nn.DataParallel(self.D).cuda(device=0)
+            #     # self.G = self.G.cuda()
+            #     # self.D = self.D.cuda()
+            # else:
+            gpus = []
+            for i in range(config.n_gpu):
+                gpus.append(i)
+            self.G = torch.nn.DataParallel(self.G, device_ids=gpus).cuda()
+            self.D = torch.nn.DataParallel(self.D, device_ids=gpus).cuda()
 
                 # define tensors, ship model to cuda, and get dataloader.
         self.renew_everything()
